@@ -417,11 +417,11 @@ func (p *Project) tools(stop <-chan bool, path string, fi os.FileInfo) {
 				if fi.IsDir() {
 					path, _ = filepath.Abs(fi.Name())
 				}
-				msg = fmt.Sprintln(p.pname(p.Name, 2), ":", Red.Bold(r.Name), Red.Regular("there are some errors in"), ":", Magenta.Bold(path))
+				msg = fmt.Sprintln(Red.Bold(r.Name), Red.Regular("there are some errors in"), ":", Magenta.Bold(path))
 				buff := BufferOut{Time: time.Now(), Text: "there are some errors in", Path: path, Type: r.Name, Stream: r.Err.Error()}
 				p.stamp("error", buff, msg, r.Err.Error())
 			} else if r.Out != "" {
-				msg = fmt.Sprintln(p.pname(p.Name, 3), ":", Red.Bold(r.Name), Red.Regular("outputs"), ":", Blue.Bold(path))
+				msg = fmt.Sprintln(Red.Bold(r.Name), Red.Regular("outputs"), ":", Blue.Bold(path))
 				buff := BufferOut{Time: time.Now(), Text: "outputs", Path: path, Type: r.Name, Stream: r.Out}
 				p.stamp("out", buff, msg, r.Out)
 			}
@@ -449,7 +449,7 @@ func (p *Project) cmd(stop <-chan bool, flag string, global bool) {
 		case <-done:
 			return
 		case r := <-result:
-			msg = fmt.Sprintln(p.pname(p.Name, 5), ":", Green.Bold("Command"), Green.Bold("\"")+r.Name+Green.Bold("\""))
+			msg = fmt.Sprintln(Green.Bold("Command"), Green.Bold("\"")+r.Name+Green.Bold("\""))
 			if r.Err != nil {
 				out = BufferOut{Time: time.Now(), Text: r.Err.Error(), Type: flag}
 				p.stamp("error", out, msg, fmt.Sprint(Red.Regular(r.Err.Error())))
@@ -657,11 +657,11 @@ func (p *Project) run(path string, stream chan Response, stop <-chan bool) (err 
 // Print with time after
 func (r *Response) print(start time.Time, p *Project) {
 	if r.Err != nil {
-		msg = fmt.Sprintln(p.pname(p.Name, 2), ":", Red.Bold(r.Name), "\n", r.Err.Error())
+		msg = fmt.Sprintln(Red.Bold(r.Name), "\n", r.Err.Error())
 		out = BufferOut{Time: time.Now(), Text: r.Err.Error(), Type: r.Name, Stream: r.Out}
 		p.stamp("error", out, msg, r.Out)
 	} else {
-		msg = fmt.Sprintln(p.pname(p.Name, 5), ":", Green.Bold(r.Name), "completed in", Magenta.Regular(big.NewFloat(float64(time.Since(start).Seconds())).Text('f', 3), " s"))
+		msg = fmt.Sprintln(Green.Bold(r.Name), "completed in", Magenta.Regular(big.NewFloat(float64(time.Since(start).Seconds())).Text('f', 3), " s"))
 		out = BufferOut{Time: time.Now(), Text: r.Name + " in " + big.NewFloat(float64(time.Since(start).Seconds())).Text('f', 3) + " s"}
 		p.stamp("log", out, msg, r.Out)
 	}
