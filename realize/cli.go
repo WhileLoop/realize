@@ -8,9 +8,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
-	"strings"
 	"sync"
-	"time"
 
 	"github.com/fsnotify/fsnotify"
 )
