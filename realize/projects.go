@@ -134,7 +134,7 @@ func (p *Project) Before() {
 		}
 	}
 	// start message
-	msg = fmt.Sprintln(p.pname(p.Name, 1), ":", Blue.Bold("Watching"), Magenta.Bold(p.files), "file/s", Magenta.Bold(p.folders), "folder/s")
+	msg = fmt.Sprintln(p.pname(p.Name, 1), ":", Blue.Bold("Wxtching"), Magenta.Bold(p.files), "file/s", Magenta.Bold(p.folders), "folder/s")
 	out = BufferOut{Time: time.Now(), Text: "Watching " + strconv.FormatInt(p.files, 10) + " files/s " + strconv.FormatInt(p.folders, 10) + " folder/s"}
 	p.stamp("log", out, msg, "")
 }
