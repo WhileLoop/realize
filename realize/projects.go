@@ -134,7 +134,7 @@ func (p *Project) Before() {
 		}
 	}
 	// start message
-	msg = fmt.Sprintln(p.pname(p.Name, 1), ":", Blue.Bold("Wxtching"), Magenta.Bold(p.files), "file/s", Magenta.Bold(p.folders), "folder/s")
+	msg = fmt.Sprintln(Blue.Bold("Wxtching"), Magenta.Bold(p.files), "file/s", Magenta.Bold(p.folders), "folder/s")
 	out = BufferOut{Time: time.Now(), Text: "Watching " + strconv.FormatInt(p.files, 10) + " files/s " + strconv.FormatInt(p.folders, 10) + " folder/s"}
 	p.stamp("log", out, msg, "")
 }
@@ -146,7 +146,7 @@ func (p *Project) Err(err error) {
 		return
 	}
 	if err != nil {
-		msg = fmt.Sprintln(p.pname(p.Name, 2), ":", Red.Regular(err.Error()))
+		msg = fmt.Sprintln(Red.Regular(err.Error()))
 		out = BufferOut{Time: time.Now(), Text: err.Error()}
 		p.stamp("error", out, msg, "")
 	}
@@ -164,7 +164,7 @@ func (p *Project) Change(event fsnotify.Event) {
 		ext = "DIR"
 	}
 	// change message
-	msg = fmt.Sprintln(p.pname(p.Name, 4), ":", Magenta.Bold(strings.ToUpper(ext)), "changed", Magenta.Bold(event.Name))
+	msg = fmt.Sprintln(Magenta.Bold(strings.ToUpper(ext)), "changed", Magenta.Bold(event.Name))
 	out = BufferOut{Time: time.Now(), Text: ext + " changed " + event.Name}
 	p.stamp("log", out, msg, "")
 }
@@ -215,7 +215,7 @@ func (p *Project) Reload(path string, stop <-chan bool) {
 		return
 	}
 	if p.Tools.Install.Status {
-		msg = fmt.Sprintln(p.pname(p.Name, 1), ":", Green.Regular(p.Tools.Install.name), "started")
+		msg = fmt.Sprintln(Green.Regular(p.Tools.Install.name), "started")
 		out = BufferOut{Time: time.Now(), Text: p.Tools.Install.name + " started"}
 		p.stamp("log", out, msg, "")
 		start := time.Now()
@@ -226,7 +226,7 @@ func (p *Project) Reload(path string, stop <-chan bool) {
 		return
 	}
 	if p.Tools.Build.Status {
-		msg = fmt.Sprintln(p.pname(p.Name, 1), ":", Green.Regular(p.Tools.Build.name), "started")
+		msg = fmt.Sprintln(Green.Regular(p.Tools.Build.name), "started")
 		out = BufferOut{Time: time.Now(), Text: p.Tools.Build.name + " started"}
 		p.stamp("log", out, msg, "")
 		start := time.Now()
@@ -245,12 +245,12 @@ func (p *Project) Reload(path string, stop <-chan bool) {
 					return
 				case r := <-result:
 					if r.Err != nil {
-						msg := fmt.Sprintln(p.pname(p.Name, 2), ":", Red.Regular(r.Err))
+						msg := fmt.Sprintln(Red.Regular(r.Err))
 						out := BufferOut{Time: time.Now(), Text: r.Err.Error(), Type: "Go Run"}
 						p.stamp("error", out, msg, "")
 					}
 					if r.Out != "" {
-						msg := fmt.Sprintln(p.pname(p.Name, 3), ":", Blue.Regular(r.Out))
+						msg := fmt.Sprintln(Blue.Regular(r.Out))
 						out := BufferOut{Time: time.Now(), Text: r.Out, Type: "Go Run"}
 						p.stamp("out", out, msg, "")
 					}
@@ -258,10 +258,10 @@ func (p *Project) Reload(path string, stop <-chan bool) {
 			}
 		}()
 		go func() {
-			log.Println(p.pname(p.Name, 1), ":", "Running..")
+			log.Println("Running..")
 			err := p.run(p.Path, result, stop)
 			if err != nil {
-				msg := fmt.Sprintln(p.pname(p.Name, 2), ":", Red.Regular(err))
+				msg := fmt.Sprintln(Red.Regular(err))
 				out := BufferOut{Time: time.Now(), Text: err.Error(), Type: "Go Run"}
 				p.stamp("error", out, msg, "")
 			}
@@ -383,28 +383,6 @@ func (p *Project) Validate(path string, fcheck bool) bool {
 	}
 	return true
 
-}
-
-// Defines the colors scheme for the project name
-func (p *Project) pname(name string, color int) string {
-	switch color {
-	case 1:
-		name = Yellow.Regular("[") + strings.ToUpper(name) + Yellow.Regular("]")
-		break
-	case 2:
-		name = Yellow.Regular("[") + Red.Bold(strings.ToUpper(name)) + Yellow.Regular("]")
-		break
-	case 3:
-		name = Yellow.Regular("[") + Blue.Bold(strings.ToUpper(name)) + Yellow.Regular("]")
-		break
-	case 4:
-		name = Yellow.Regular("[") + Magenta.Bold(strings.ToUpper(name)) + Yellow.Regular("]")
-		break
-	case 5:
-		name = Yellow.Regular("[") + Green.Bold(strings.ToUpper(name)) + Yellow.Regular("]")
-		break
-	}
-	return name
 }
 
 //  Tool logs the result of a go command
