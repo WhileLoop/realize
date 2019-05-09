@@ -145,7 +145,6 @@ func setup(c *cli.Context) (err error) {
 	interact.Run(&interact.Interact{
 		Before: func(context interact.Context) error {
 			context.SetErr(realize.Red.Bold("INVALID INPUT"))
-			context.SetPrfx(realize.Output, realize.Yellow.Regular("[")+time.Now().Format("15:04:05")+realize.Yellow.Regular("]")+realize.Yellow.Bold("[")+strings.ToUpper(realize.RPrefix)+realize.Yellow.Bold("]"))
 			return nil
 		},
 		Questions: []*interact.Question{
